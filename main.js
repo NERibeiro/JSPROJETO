@@ -1,22 +1,27 @@
 const convertButton = document.querySelector(".convert-button")
 const currencySelect = document.querySelector(".currency-select")
 
-function convertValues() {
+async function convertValues  () {
    const inputCurrencyValue = document.querySelector(".input").value
    const currencyValueToConvert = document.querySelector(".valor-da-moeda-converter") //valor da moeda
-   const currencyValueConverted = document.querySelector(".valordamoeda") //outras moedas
+   const currencyValueConverted = document.querySelector(".valordamoeda")//outras moedas
 
-   console.log(currencySelect.value)
+   //console.log(currencySelect.value)
 
-   const dolarToday = 4.99
-   const euroToday = 5.29
+ const data = await fetch("https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,BTC-BRL").then(resposta => resposta.json())
+
+const dolar = data.USDBRL.high
+const euro = data.EURBRL.high
+const BitCoin = data.BTCBRL.high
+
+ console.log(data)
 
 
    if (currencySelect.value == "Dolar") {
       currencyValueConverted.innerHTML = new Intl.NumberFormat("en-US", {
          style: "currency",
          currency: "USD",
-      }).format(inputCurrencyValue / dolarToday)
+      }).format(inputCurrencyValue / dolar)
    }
 
 
@@ -24,7 +29,14 @@ function convertValues() {
       currencyValueConverted.innerHTML = new Intl.NumberFormat("de-DE", {
          style: "currency",
          currency: "EUR",
-      }).format(inputCurrencyValue / euroToday)
+      }).format(inputCurrencyValue / euro)
+   }
+
+   if (currencySelect.value == "BitCoin") {
+      currencyValueConverted.innerHTML = new Intl.NumberFormat("BTC", {
+         style: "currency",
+         currency: "BTC",
+      }).format(inputCurrencyValue / BitCoin)
    }
 
 
@@ -48,6 +60,11 @@ function changeCurrency() {
    if (currencySelect.value == "Euro") {
       currencyName.innerHTML = "Euro"
       currencyImage.src = "./assets/eur.png"
+   }
+
+   if (currencySelect.value == "BitCoin") {
+      currencyName.innerHTML = "BitCoin"
+      currencyImage.src = "./assets/btc.png"
    }
 
    convertValues()
